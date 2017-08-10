@@ -32,6 +32,7 @@ module.exports = Backbone.Model.extend({
     previousModel: null,
     changesCount:  0,
     storables: [],
+    modules: [],
     toLoad: [],
     opened: {},
     device: '',
@@ -40,6 +41,7 @@ module.exports = Backbone.Model.extend({
   initialize(c) {
     this.config = c;
     this.set('Config', c);
+    this.set('modules', []);
 
     if(c.el && c.fromElement)
       this.config.components = c.el.innerHTML;
@@ -117,6 +119,7 @@ module.exports = Backbone.Model.extend({
     if(M.onLoad)
       this.get('toLoad').push(M);
 
+    this.get('modules').push(M);
     return this;
   },
 
@@ -282,7 +285,7 @@ module.exports = Backbone.Model.extend({
     this.stopListening(classes, 'add remove', this.componentsUpdated);
     this.listenTo(classes, 'add remove', this.componentsUpdated);
 
-    var evn = 'change:style change:content';
+    var evn = 'change:style change:content change:attributes';
     this.stopListening(model, evn, this.componentsUpdated);
     this.listenTo(model, evn, this.componentsUpdated);
 
